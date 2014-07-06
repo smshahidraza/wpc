@@ -1,0 +1,236 @@
+<!doctype html>
+<!--[if IEMobile 7 ]>    <html class="no-js iem7" > <![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js" > <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="World Prayer Clock">
+  <meta name="author" content="Shahid Raza">
+  <script type="text/javascript" src="data.json"></script>
+  <script type="text/javascript" src="userdata.json"></script>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="cleartype" content="on">
+
+  <link rel="stylesheet" href="style.css?v=1">
+  <script>window.jQuery || document.write("<script src='jquery-1.5.1.min.js'>\x3C/script>")</script>
+  <style>
+
+  	// html, body{ margin:0px; padding:0px; background-image:url("images/madina.jpg");background-repeat:no-repeat; background-size: 100%; } 
+    html, body{ margin:0px; padding:0px; background-color:#000066} //#212124}background
+  	body{ display:block; width:100%; height:100%;}
+  	#main{ display:block; padding:0px; text-align: center;}
+
+
+        header {
+        	//background-color: gray;//#212124;
+            //position:fixed;
+            top:0;
+            //width:100%;
+			display:block;
+            //background-color:#3333;
+            padding:5px;
+            text-align:center;
+        }
+
+        footer {
+            //background-color: green;//#212124;
+             overflow: hidden;
+            //width: 95%;
+            bottom: 0;
+            padding:10px;
+			text-align:center;
+            display:block;
+        }
+        #message{
+            background-color: gray;
+             overflow: hidden;
+             text-font:Calibiri;
+            //width: 95%;
+            height: 20px;
+            bottom: 0;
+            padding:5px;
+      text-align:center;
+            display:block;
+
+        }
+        #location{
+            background-color: #212124;
+            color: white;
+             overflow: hidden;
+             font-size: 20px;
+             font-family:"Calibiri" ;
+            //width: 95%;
+            height: 20px;
+            bottom: 0;
+            padding:5px;
+      text-align:center;
+            display:block;
+
+        }
+
+        .sidebarcontent{
+			float: left;
+		}
+
+
+  </style>
+<script type="text/javascript">
+
+function changeColorLeft(colorName){
+    var moveLeftCanavas = document.getElementById('moveLeft'),
+    moveLeftContext = moveLeftCanavas.getContext('2d');
+    createLeftArrow(moveLeftContext, moveLeftCanavas, colorName);
+}
+
+function changeColorRight(colorName){
+    var moveLeftCanavas = document.getElementById('moveRight'),
+    moveLeftContext = moveLeftCanavas.getContext('2d');
+    createRightArrow(moveLeftContext, moveLeftCanavas, colorName);
+}
+
+
+
+</script>
+</head>
+<body onload="initApp();">
+
+<div id="container">
+    <header>
+  			<canvas style="border:0px solid gray; background-color: #FF9933" id='lowerbase1canvas' ></canvas>
+				<canvas style="border:0px solid gray; background-color: #00CC00" id='lowerbase2canvas' ></canvas>
+				<a href="mansetting.html"><canvas style="border:0px solid gray; background-color: #0066FF" id='lowerbase3canvas' ></canvas></a>
+        <canvas style="border:0px solid gray; cursor: pointer; background-color: #9933FF" id='lowerbase4canvas' ></canvas>
+				<canvas style="border:0px solid gray; cursor: pointer; background-color: #FF3300" id='lowerbase5canvas' ></canvas>
+    </header>
+
+    <!-- <div id="location" style="font:35px Calibri; height:50px">
+        San Mateo, CA, US
+    </div> -->
+
+
+
+
+		<div id="main" role="main">
+
+      <canvas id="currentclockcanvas" style="background-color:#000066; opacity:0.7" ></canvas>
+      <canvas id='refreshClock' width="30" height="30"  style="position: absolute; top:1px; left:2px; border: 0; cursor: pointer; z-index: 1;"></canvas>
+      <canvas id='helpCan' width="30" height="30"  style="position: absolute; top:30px; left:2px; border: 0; cursor: pointer; z-index: 1; "></canvas>
+
+
+		</div>
+
+
+    <footer>
+
+				<canvas style="border-right:1px solid gray; " id='lowerbase7canvas' ></canvas>
+				<canvas style="border-right:1px solid gray; " id='lowerbase8canvas' ></canvas>
+				<canvas style="border-right:1px solid gray; " id='lowerbase9canvas' ></canvas>
+				<canvas style="border:0px solid gray; " id='lowerbase10canvas' ></canvas>
+
+    </footer>
+</div> <!--! end of #container -->
+
+
+  
+  <script type="text/javascript">
+  	$(document).ready( function(){
+
+  		//Get the canvas & context
+  		var c = $('#currentclockcanvas');
+  		var ct = c.get(0).getContext('2d');
+  		var container = $(c).parent();
+      var appWidth, appHight;
+        if(window.innerWidth > window.innerHeight){
+          appWidth = window.innerHeight;
+          appHight = window.innerWidth;
+        }else{
+          appWidth = window.innerWidth;
+          appHight = window.innerHeight;
+        }
+
+  		//Run function when browser  resize
+	  	$(window).resize( respondCanvas );
+
+	  	function respondCanvas(){
+        var conWidth = $(container).width();
+        //console.log("Window Width:"+window.innerWidth+"-->"+window.innerHeight+"Ratio: "+(appWidth/appHight)+"container width"+conWidth);
+        //var appWidth, appHeight;
+        if(conWidth > window.innerHeight){
+          appWidth = window.innerHeight;
+          appHight = conWidth;
+        }else{
+          appWidth = conWidth;
+          appHight = window.innerHeight;
+        }
+  			c.attr('width', appWidth ); //max width
+  			c.attr('height', (appHight/10)*6 ); //max height
+
+  			//Redraw & reposition content
+        if(window.innerWidth > window.innerHeight){
+          appWidth = window.innerHeight;
+          appHight = window.innerWidth;
+        }else{
+          appWidth = window.innerWidth;
+          appHight = window.innerHeight;
+        }
+
+
+
+	  		reponsdFooterCanvas(appWidth, appHight);
+	  		refreshClock(7);
+        //initApp();
+		}
+
+		function reponsdFooterCanvas(appWidth, appHight){
+
+		for(var i = 7; i < 11; i++){
+					var btc = $('#lowerbase'+i+'canvas');
+		  			var btct = btc.get(0).getContext('2d');
+		  			btc.attr('width', appWidth/4.6 ); //max width
+					btc.attr('height', (appHight/10)*2 ); //max width
+
+
+		}
+
+				for(var i = 1; i < 6; i++){
+							var btc = $('#lowerbase'+i+'canvas');
+				  			var btct = btc.get(0).getContext('2d');
+                if(i == 1 || i == 2){
+				  			btc.attr('width', appWidth/4.6  ); //max width
+                }else{
+                btc.attr('width', appWidth/9 ); //max width                  
+                }
+							btc.attr('height',  (appHight/10)*1.2 ); //max width
+
+			}
+
+
+		}
+
+		//Initial call
+		respondCanvas();
+		reponsdFooterCanvas(appWidth, appHight);
+  	});
+
+
+
+
+  </script>
+
+<script src='clockutility.js' type="text/javascript">
+</script>
+<script src='prayerClock.js' type="text/javascript">
+</script>
+<script src='prayerTime2.3.js' type="text/javascript">
+</script>
+<script src='Clockscript.js' type="text/javascript">
+</script>
+
+
+
+</body>
+</html>

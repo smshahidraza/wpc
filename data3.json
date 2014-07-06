@@ -1,0 +1,26 @@
+var data = {
+   "01JAN": [
+      {
+         "name": "Imsak",
+         "time": "5.946716544531878",
+         "next": "DOWN"
+      },
+      {
+         "name": "Fajr",
+         "time": "6.113383211198545",
+         "next": "DOWN"
+      }
+   ],
+   "02JAN": [
+      {
+         "name": "Imsak",
+         "time": "5.951537894221276",
+         "next": "SAME"
+      },
+      {
+         "name": "Fajr",
+         "time": "6.118204560887943",
+         "next": "SAME"
+      }
+   ]}
+;
